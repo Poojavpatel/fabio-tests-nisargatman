@@ -13,13 +13,15 @@ function CardList({}) {
     setDraggingCardPosition(cardData.position);
   }
   const handleDrop = (e, cardData) => {
+    const toPosition = draggingCardPosition;
+    const fromPosition = cardData.position;
     let reordered = [];
     cards.forEach(card => {
       if(card.id == draggingCardId) {
-        card.position = cardData.position;
+        card.position = fromPosition;
       };
       if(card.id == e.currentTarget.id) {
-        card.position = draggingCardPosition;
+        card.position = toPosition;
       };
       reordered.push(card);
     });
