@@ -1,0 +1,16 @@
+.card{
+  border: 2px solid #7b2db7;
+  border-radius: 10%;
+  overflow: hidden;
+  flex-basis: 30%;
+  .title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #7b2db7;
+  }
+  .cat{
+    min-width: 250px;
+    height: 200px;
+    min-height: 200px;
+  }
+}
