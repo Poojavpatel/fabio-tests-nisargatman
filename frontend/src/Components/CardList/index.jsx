@@ -2,11 +2,15 @@ import React, {useState, useEffect} from 'react';
 import Card from '../Card';
 import documentJson from '../../Static/documents.json'; 
 import styles from './CardList.module.scss';
+import ImageModal from "../ImageModal"
+import axios from 'axios';
 
 function CardList({}) {
   const [cards, setCards] = useState([]);
   const [draggingCardPosition, setDraggingCardPosition] = useState(null);
   const [draggingCardId, setDraggingCardId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
 
   const handleDrag = (e, cardData) => {
     setDraggingCardId(e.currentTarget.id);
@@ -29,7 +33,12 @@ function CardList({}) {
   }
 
   useEffect(() => {
-    setCards(documentJson);
+    axios.get('http://127.0.0.1:8000/getDocuments')
+    .then(response => {
+      setCards(response.data);
+      // setCards(documentJson);
+    })
+    .catch(e => console.log('Error in fetching api', e))
   }, []);
 
   return (
@@ -45,9 +54,16 @@ function CardList({}) {
             cardData={card}
             handleDrag={handleDrag}
             handleDrop={handleDrop}
+            setShowModal={setShowModal}
+            setModalData={setModalData}
           />
         ))
       }
+      <ImageModal
+        showModal={showModal}
+        modalData={modalData}
+        setShowModal={setShowModal}
+      />
       </div>
     </div>
   )

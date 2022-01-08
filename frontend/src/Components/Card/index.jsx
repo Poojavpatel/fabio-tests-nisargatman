@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import styles from './Card.module.scss';
 import Loader from "react-loader-spinner";
+const noop = () => {};
 
-function CardList({cardData, handleDrag, handleDrop}) {
+function CardList({cardData = noop, handleDrag = noop, handleDrop = noop, setShowModal = noop, setModalData = noop}) {
   const imageMap = {
     'bank-draft': 'https://i.pinimg.com/564x/16/ca/b1/16cab153397fc070d5369635ba891e8d.jpg',
     'bill-of-lading' : 'https://static.india.com/wp-content/uploads/2015/11/089.jpg?impolicy=Medium_Resize&w=1200&h=800',
@@ -20,6 +21,10 @@ function CardList({cardData, handleDrag, handleDrop}) {
       onDragOver={(e) => e.preventDefault()}
       onDragStart={(e) => handleDrag(e, cardData)}
       onDrop={(e) => handleDrop(e, cardData)}
+      onClick={() => {
+        setShowModal(true);
+        setModalData(imageMap[cardData.type]);
+      }}
     >
       <div className={styles['title']}>{cardData.title}</div>
       {

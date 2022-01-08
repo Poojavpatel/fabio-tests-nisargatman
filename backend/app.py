@@ -2,6 +2,7 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.requests import Request
 from starlette.routing import Route
+from starlette.middleware.cors import CORSMiddleware
 from databases import Database
 
 database = Database("sqlite:///example.db")
@@ -30,3 +31,5 @@ app = Starlette(debug=True, routes=[
   Route('/updateDocuments', updateDocuments, methods=['POST']),
   Route('/addDocuments', addDocuments, methods=['POST'])
 ])
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"])
