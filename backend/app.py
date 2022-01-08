@@ -1,7 +1,9 @@
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Route
-import sqlite3
+from databases import Database
+
+database = Database("sqlite:///example.db")
 
 async def homepage(request):
   return JSONResponse({'hello': 'world'})
