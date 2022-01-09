@@ -5,12 +5,12 @@ import styles from './CardList.module.scss';
 import ImageModal from "../ImageModal"
 import axios from 'axios';
 
-function CardList({}) {
+function CardList() {
   const [cards, setCards] = useState([]);
   const [draggingCardPosition, setDraggingCardPosition] = useState(null);
   const [draggingCardId, setDraggingCardId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const handleDrag = (e, cardData) => {
     setDraggingCardId(e.currentTarget.id);
@@ -41,12 +41,13 @@ function CardList({}) {
     .catch(e => console.log('Error in fetching api', e))
   }, []);
 
+  if(!(cards && cards.length)) return <div>No Cards to display</div>
+
   return (
     <div className={styles['cardsWrapper']}>
       <h1>Cats As Documents</h1>
       <div className={styles['cardlist']}>
       {
-        cards && cards.length > 0 && 
         cards.sort((a,b) => a.position - b.position)
         .map((card, index) => (
           <Card
@@ -55,13 +56,13 @@ function CardList({}) {
             handleDrag={handleDrag}
             handleDrop={handleDrop}
             setShowModal={setShowModal}
-            setModalData={setModalData}
+            setImageUrl={setImageUrl}
           />
         ))
       }
       <ImageModal
         showModal={showModal}
-        modalData={modalData}
+        imageUrl={imageUrl}
         setShowModal={setShowModal}
       />
       </div>

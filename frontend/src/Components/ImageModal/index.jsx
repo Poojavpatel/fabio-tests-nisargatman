@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import styles from './ImageModal.module.scss';
-import Loader from "react-loader-spinner";
+const noop = () => {};
 
-function ImageModal({showModal, modalData, setShowModal}) {
+function ImageModal({showModal = false, imageUrl = "", setShowModal = noop}) {
 
   useEffect(() => {
     const close = (e) => {
@@ -23,7 +23,7 @@ function ImageModal({showModal, modalData, setShowModal}) {
       >
         <div className={styles['modalContent']}>
           <img 
-            src={modalData} 
+            src={imageUrl} 
             alt="cat" 
             className={styles['cat']}
           />
