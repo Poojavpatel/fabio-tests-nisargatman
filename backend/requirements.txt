@@ -2,3 +2,4 @@ starlette
 python-multipart
 uvicorn
 databases[sqlite]
+python-dotenv

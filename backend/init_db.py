@@ -1,15 +1,22 @@
+import os
+from dotenv import load_dotenv
 import asyncio
 from databases import Database
 
+# populate env and config variables
+load_dotenv()
+CAT_DOCUMENT_TABLE = os.getenv('CAT_DOCUMENT_TABLE')
+DATABASE_NAME = os.getenv('DATABASE_NAME')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 async def main() -> None:
-    database = Database("sqlite:///example.db")
+    database = Database(DATABASE_URL)
     await database.connect()
 
-    query = """CREATE TABLE CatDocuments (id INTEGER PRIMARY KEY, title VARCHAR(100), type VARCHAR(100), position INTEGER)"""
+    query = f"CREATE TABLE IF NOT EXISTS {CAT_DOCUMENT_TABLE} (id INTEGER PRIMARY KEY, title VARCHAR(100), type VARCHAR(100), position INTEGER)"
     await database.execute(query=query)
 
-    query = "INSERT INTO CatDocuments(title, type, position) VALUES (:title, :type, :position)"
+    query = f"INSERT INTO {CAT_DOCUMENT_TABLE}(title, type, position) VALUES (:title, :type, :position)"
     values = [
         {"title": "Bank Draft", "type": "bank-draft", "position": 0},
         {"title": "Bill of Lading", "type": "bill-of-lading", "position": 1},

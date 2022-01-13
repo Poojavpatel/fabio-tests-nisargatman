@@ -2,18 +2,18 @@
 
 ## Setup 
 
-From the `backend/` directory, create a new virtual environment, install the dependencies, and create the database:
+From the `backend/` directory, install the dependencies, and create the database:
 
 ```shell
-python3 -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
-python init_db.py
+cd backend
+pip3 install -r requirements.txt
+python3 init_db.py
 ```
 
 From the `frontend/` directory, install the dependencies:
 
 ```shell
+cd frontend
 npm install
 ```
 
@@ -21,9 +21,10 @@ npm install
 
 ### Backend
 
-From the `backend` directory (using the virtual environment), enter the following:
+From the `backend` directory, enter the following:
 
 ```shell
+cd backend
 uvicorn app:app
 ```
 
@@ -32,6 +33,7 @@ From the `frontend/` directory, enter the following:
 
 
 ```shell
+cd frontend
 npm start
 ```
 
