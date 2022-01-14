@@ -20,7 +20,6 @@ function CardList({cardData = {}, handleDrag = noop, handleDrop = noop, setShowM
         setImageUrl(imageMap[cardData.type]);
       }}
     >
-      <div className={styles['title']}>{cardData.title}</div>
       {
         !loaded && 
         <div className={styles['loader']}>
@@ -28,7 +27,7 @@ function CardList({cardData = {}, handleDrag = noop, handleDrop = noop, setShowM
             loading={true}
             error={false}
             type="TailSpin"
-            color="#7b2db7"
+            color="#A763CA"
             height={50}
             width={50}
           />
@@ -43,6 +42,7 @@ function CardList({cardData = {}, handleDrag = noop, handleDrop = noop, setShowM
           setLoaded(true);
         }}
       />
+      <div className={styles['title']}>{cardData.title}</div>
     </div>
   )
 }

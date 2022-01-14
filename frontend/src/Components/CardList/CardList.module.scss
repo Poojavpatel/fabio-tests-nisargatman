@@ -1,10 +1,31 @@
 .cardsWrapper{
+  .header{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 80%;
+    margin: 30px auto;
+    .title{
+      font-size: 50px;
+      color: #70BAC9;
+      text-align: left;
+      margin: 0;
+    }
+    .position{
+      padding: 8px 14px;
+      border: 2px solid #A763CA;
+      border-radius: 14px;
+      background: #A763CA;
+      color: white;
+      font-weight: 600;
+    }
+  }
   .cardlist{
     width: 80%;
     margin: 0 auto;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     flex-wrap: wrap;
-    gap: 40px;
+    gap: 40px 30px;
   }
 }

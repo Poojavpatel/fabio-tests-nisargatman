@@ -4,7 +4,10 @@ import documentJson from '../../Static/documents.json';
 import styles from './CardList.module.scss';
 import ImageModal from "../ImageModal"
 import axios from 'axios';
-import useInterval from "../../hooks/useInterval"
+import useInterval from "../../hooks/useInterval";
+import Loader from "react-loader-spinner";
+import config from "../../config/index";
+import moment from 'moment';
 
 function CardList() {
   const [cards, setCards] = useState([]);
@@ -13,6 +16,8 @@ function CardList() {
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
   const [positionsChanged, setPositionsChanged] = useState(false);
+  const [updatingPosition, setUpdatingPosition] = useState(false);
+  const [lastSaved, setLastSaved] = useState(moment().format("DD/MM/YYYY HH:mm:ss"));
 
   const handleDrag = (e, cardData) => {
     setDraggingCardId(e.currentTarget.id);
@@ -40,8 +45,8 @@ function CardList() {
     cards.forEach(card => {
       positiondata[card.id] = card.position;
     })
-
-    axios.post('http://127.0.0.1:8000/updateDocuments', positiondata, {
+    setUpdatingPosition(true);
+    axios.post(config.url.updateDocuments, positiondata, {
       headers : {
         'Content-Type': 'application/json'
       }
@@ -49,8 +54,11 @@ function CardList() {
     .then(response => {
       console.log(response.data);
       setPositionsChanged(false);
+      const currentTime = moment().format("DD/MM/YYYY HH:mm:ss");
+      setLastSaved(currentTime);
     })
     .catch(e => console.log('Error in fetching api', e))
+    .finally(setUpdatingPosition(false))
   }
 
   const checkAndUpdatePositions = () => {
@@ -63,7 +71,7 @@ function CardList() {
   }, 5000);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/getDocuments')
+    axios.get(config.url.getDocuments)
     .then(response => {
       setCards(response.data);
       // setCards(documentJson);
@@ -76,7 +84,26 @@ function CardList() {
   return (
     <>
     <div className={styles['cardsWrapper']}>
-      <h1>Cats As Documents</h1>
+      <div className={styles['header']}>
+        <h1 className={styles['title']}>Happy Cat Day!</h1>
+        <div className={styles['position']}>
+          {updatingPosition ? 
+            <>
+              <span>Updating Positions</span>
+              <Loader
+                loading={true}
+                error={false}
+                type="TailSpin"
+                color="#fff"
+                height={15}
+                width={15}
+                style={{display: 'inline-block', marginLeft: '12px'}}
+              /> 
+            </> 
+            : <span>Time since last save {moment(moment().diff(moment(lastSaved, "DD/MM/YYYY HH:mm:ss"))).format('mm:ss')}</span>
+          }
+        </div>
+      </div>
       <div className={styles['cardlist']}>
       {
         cards.sort((a,b) => a.position - b.position)
