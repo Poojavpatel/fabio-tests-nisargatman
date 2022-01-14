@@ -4,6 +4,7 @@ import documentJson from '../../Static/documents.json';
 import styles from './CardList.module.scss';
 import ImageModal from "../ImageModal"
 import axios from 'axios';
+import useInterval from "../../hooks/useInterval"
 
 function CardList() {
   const [cards, setCards] = useState([]);
@@ -11,6 +12,7 @@ function CardList() {
   const [draggingCardId, setDraggingCardId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
+  const [positionsChanged, setPositionsChanged] = useState(false);
 
   const handleDrag = (e, cardData) => {
     setDraggingCardId(e.currentTarget.id);
@@ -30,7 +32,35 @@ function CardList() {
       reordered.push(card);
     });
     setCards(reordered);
+    setPositionsChanged(true);
   }
+
+  const updatePositions = () => {
+    const positiondata = {};
+    cards.forEach(card => {
+      positiondata[card.id] = card.position;
+    })
+
+    axios.post('http://127.0.0.1:8000/updateDocuments', positiondata, {
+      headers : {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      console.log(response.data);
+      setPositionsChanged(false);
+    })
+    .catch(e => console.log('Error in fetching api', e))
+  }
+
+  const checkAndUpdatePositions = () => {
+    if(!positionsChanged) return false;
+    updatePositions();
+  }
+ 
+  useInterval(() => {
+    checkAndUpdatePositions()
+  }, 5000);
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/getDocuments')
@@ -44,6 +74,7 @@ function CardList() {
   if(!(cards && cards.length)) return <div>No Cards to display</div>
 
   return (
+    <>
     <div className={styles['cardsWrapper']}>
       <h1>Cats As Documents</h1>
       <div className={styles['cardlist']}>
@@ -67,6 +98,7 @@ function CardList() {
       />
       </div>
     </div>
+    </>
   )
 }
 export default CardList;
